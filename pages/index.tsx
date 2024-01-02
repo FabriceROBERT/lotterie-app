@@ -8,6 +8,8 @@ import { ethers } from 'ethers'
 import { currency } from '@/config/constant'
 import CountdownTimer from '@/components/CountdownTimer'
 import toast from 'react-hot-toast'
+import Marquee from 'react-fast-marquee'
+import AdminControls from '@/components/adminControls'
 
 
 export default function Home() {
@@ -26,6 +28,9 @@ export default function Home() {
   const { data:winnings } = useContractRead(contract, "getWinningsForAddress" ,[address]
   )
   const { mutateAsync: WithdrawWinnings } = useContractWrite(contract, "WithdrawWinnings")
+   const { data:lastWinner } = useContractRead(contract, "lastWinner")
+   const { data:lastWinnerAmount } = useContractRead(contract, "lastWinnerAmount")
+   const { data: lotteryOperator} = useContractRead(contract, "lotteryOperator")
 
 
 
@@ -66,6 +71,7 @@ export default function Home() {
       })
     }
     catch(err) { 
+      
       toast.error('Oups quelque chose ne va pas !', {
         id:notification,
       })
@@ -90,6 +96,18 @@ export default function Home() {
       <div className='flex-1'>
 
       <Header/>
+      <Marquee className='bg-[#0A1F1C] p-5 mb-5' gradient={false} speed={100}>
+      <div className='flex space-x-2 mx-10 text-emerald-600 text-bold'>
+        <h4>Dernier Gagnant: {lastWinner?.toString()} </h4>
+        <h4>Lot précédent: {ethers.utils.formatEther(lastWinnerAmount.toString())} {currency} </h4>
+      </div>
+      </Marquee>
+
+      {lotteryOperator === address && ( 
+      <div className='flex justify-center'>
+        <AdminControls/>
+      </div> )}
+
       {winnings > 0 &&  (
         
         <div className='max-w-md md:max-w-2xl lg:max-w-4xl mx-auto mt-5'>

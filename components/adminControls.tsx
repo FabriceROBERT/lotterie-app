@@ -1,11 +1,11 @@
+import React from 'react'
 import { currency } from '@/config/constant'
 import { ArrowPathIcon, ArrowUturnDownIcon, CurrencyDollarIcon, StarIcon } from '@heroicons/react/24/solid'
 import { useContract, useContractRead, useContractWrite } from '@thirdweb-dev/react'
 import { ethers } from 'ethers'
-import React from 'react'
 import toast from 'react-hot-toast'
 
-function adminControls() {
+function AdminControls() {
 
     const {contract, isLoading} = useContract(process.env.NEXT_PUBLIC_LOTTERY_CONTRACT_ADDRESS)
 
@@ -105,4 +105,4 @@ function adminControls() {
   )
 }
 
-export default adminControls
+export default AdminControls
